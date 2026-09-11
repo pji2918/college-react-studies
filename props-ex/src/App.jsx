@@ -1,17 +1,28 @@
+import { useState } from "react";
 import "./App.css";
-import Comp, { add, MIN, MAX } from "./components/Comp";
 
-function App() {
-    const onClick = (message) => {
-        alert(message);
+export default function App() {
+    const [todoList, setTodoList] = useState([]);
+    const [inputData, setInputData] = useState("");
+
+    const handleAdd = () => {
+        if (inputData) {
+            setTodoList([...todoList, inputData]);
+        }
+        setInputData("");
     };
 
+    const handleChange = (event) => setInputData(event.target.value);
     return (
-        <div>
-            {MIN}, {MAX}, {add(1, 2)}
-            <Comp onClick={onClick} />
-        </div>
+        <>
+            <input type="text" value={inputData} onChange={handleChange} />
+            <button onClick={handleAdd}>ADD</button>
+
+            <ul>
+                {todoList.map((value) => (
+                    <li key={value}>{value}</li>
+                ))}
+            </ul>
+        </>
     );
 }
-
-export default App;
