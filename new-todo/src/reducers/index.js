@@ -1,5 +1,5 @@
 export function todoReducer(state, action) {
-    switch (action) {
+    switch (action.type) {
         case "ADD": {
             return [action.payload, ...state];
         }
