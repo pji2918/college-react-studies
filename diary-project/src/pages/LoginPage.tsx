@@ -6,7 +6,7 @@ import { SessionContext } from "../contexts/context";
 
 export default function LoginPage() {
     const email = useRef("");
-    const password = useRef("");
+    const password = useRef<HTMLInputElement | null>(null);
     const [pageType, setPageType] = useState<"login" | "register">("login");
     const [pending, setPending] = useState(false);
     const [error, setError] = useState<ErrorCode | undefined>(undefined);
@@ -22,7 +22,7 @@ export default function LoginPage() {
         setPending(true);
         const credentials = {
             email: email.current.trim(),
-            password: password.current,
+            password: password.current?.value ?? "",
         };
 
         if (pageType === "login") {
@@ -46,6 +46,9 @@ export default function LoginPage() {
                     setError("user_already_exists");
                 }
             }
+        }
+        if (password.current) {
+            password.current.value = "";
         }
         setPending(false);
     };
@@ -88,11 +91,11 @@ export default function LoginPage() {
                         required
                     />
                     <input
+                        ref={password}
                         name="password"
                         type="password"
                         className="input w-full"
                         placeholder="비밀번호"
-                        onChange={(e) => (password.current = e.target.value)}
                         required
                     />
                     <button
