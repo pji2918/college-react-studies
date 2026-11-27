@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate } from "react-router";
 import type { ErrorCode } from "@supabase/auth-js/src/lib/error-codes";
+import { SessionContext } from "../contexts/context";
 
 export default function LoginPage() {
     const email = useRef("");
@@ -11,6 +12,9 @@ export default function LoginPage() {
     const [error, setError] = useState<ErrorCode | undefined>(undefined);
     const loginRegisterText = pageType === "login" ? "로그인" : "회원가입";
     const navigate = useNavigate();
+    const { user } = useContext(SessionContext);
+
+    if (user) return <main>이미 로그인되어 있습니다.</main>;
 
     const handleSubmit = async () => {
         setPending(true);
@@ -25,6 +29,7 @@ export default function LoginPage() {
             if (!error) {
                 navigate("/", { replace: true });
             } else {
+                console.warn(error.code);
                 if (error.code === "invalid_credentials") {
                     setError("invalid_credentials");
                 }
@@ -33,8 +38,11 @@ export default function LoginPage() {
             const { error } = await supabase.auth.signUp(credentials);
             if (!error) {
                 navigate("/", { replace: true });
-            } else if (error.code === "user_already_exists") {
-                setError("user_already_exists");
+            } else {
+                console.warn(error.code);
+                if (error.code === "user_already_exists") {
+                    setError("user_already_exists");
+                }
             }
         }
         setPending(false);
@@ -53,17 +61,22 @@ export default function LoginPage() {
                     <h1 className="card-title text-3xl font-bold">
                         {loginRegisterText}
                     </h1>
-                    <div className="h-1" />
-                    {error && error === "invalid_credentials" && (
-                        <div className="w-full alert alert-error alert-soft alert-vertical">
-                            이메일 또는 비밀번호가 일치하지 않습니다.
-                        </div>
-                    )}
-                    {error && error === "user_already_exists" && (
-                        <div className="w-full alert alert-error alert-soft alert-vertical">
-                            이미 존재하는 사용자입니다.
-                        </div>
-                    )}
+                    {!error && <div className="h-1" />}
+                    {error &&
+                        ((error === "invalid_credentials" && (
+                            <div className="w-full alert alert-error alert-soft alert-vertical">
+                                이메일 또는 비밀번호가 일치하지 않습니다.
+                            </div>
+                        )) ||
+                            (error === "user_already_exists" && (
+                                <div className="w-full alert alert-error alert-soft alert-vertical">
+                                    이미 존재하는 사용자입니다.
+                                </div>
+                            )) || (
+                                <div className="w-full alert alert-error alert-soft alert-vertical">
+                                    알 수 없는 오류가 발생했습니다.
+                                </div>
+                            ))}
                     <input
                         name="email"
                         type="email"
