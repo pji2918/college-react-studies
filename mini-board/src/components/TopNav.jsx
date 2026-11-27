@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabase";
 import { SessionContext } from "../contexts/contexts";
 import Loading from "./Loading";
 
-export default function NavBar() {
+export default function TopNav() {
     const [error, setError] = useState("");
     const [pending, setPending] = useState(false);
     const { user, ready } = useContext(SessionContext);

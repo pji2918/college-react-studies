@@ -6,14 +6,12 @@ import Loading from "./Loading";
 export default function MainPage() {
     const { user, ready } = useContext(SessionContext);
 
-    if (!ready) {
-        return <Loading />;
-    }
+    if (!ready) return <Loading />;
 
     if (user) {
         return (
             <main>
-                <Board />
+                <Board key={user.id} />
             </main>
         );
     } else {
