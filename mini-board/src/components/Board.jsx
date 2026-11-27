@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 import { supabase } from "../lib/supabase";
+import { SessionContext } from "../contexts/contexts";
 
-export default function Board({ user }) {
+export default function Board() {
     const [posts, setPosts] = useState([]);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -10,6 +11,8 @@ export default function Board({ user }) {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState("");
     const [notice, setNotice] = useState("");
+
+    const { user } = useContext(SessionContext);
 
     const loadPosts = useCallback(async (signal) => {
         setLoading(true);

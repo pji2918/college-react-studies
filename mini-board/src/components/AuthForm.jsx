@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router";
 import { supabase } from "../lib/supabase";
+import { SessionContext } from "../contexts/contexts";
 
 export default function AuthForm() {
     const [mode, setMode] = useState("login");
@@ -8,6 +10,18 @@ export default function AuthForm() {
     const [busy, setBusy] = useState(false);
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const { user } = useContext(SessionContext);
+
+    if (user) {
+        return (
+            <main>
+                <p>당신은 이미 로그인되어 있습니다.</p>
+                <Link to="/">메인 페이지로 가기</Link>
+            </main>
+        );
+    }
+
     const isSignup = mode === "signup";
 
     async function handleSubmit(event) {
@@ -35,7 +49,7 @@ export default function AuthForm() {
                 if (error) throw error;
             }
             setPassword("");
-            // 로그인 성공 시 App의 Auth 이벤트가 화면을 바꿉니다.
+            navigate("/");
         } catch (err) {
             setError(
                 err instanceof Error

@@ -7,7 +7,8 @@ body {
     background: #f3f6f8;
     color: #172d3a;
 }
-main {
+main,
+nav {
     max-width: 840px;
     margin: 40px auto;
     padding: 0 20px;
