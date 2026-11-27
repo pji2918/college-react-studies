@@ -14,7 +14,9 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const { user } = useContext(SessionContext);
 
-    if (user) return <main>이미 로그인되어 있습니다.</main>;
+    if (user) {
+        navigate("/");
+    }
 
     const handleSubmit = async () => {
         setPending(true);
