@@ -8,7 +8,6 @@ export default function MainPage() {
 
     if (!user) {
         navigate("/login");
-        return <>Not Signed IN</>;
     } else {
         return (
             <>

@@ -6,10 +6,7 @@ export default function LogoutPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const logOut = async () => {
-            await supabase.auth.signOut();
-        };
-        logOut();
+        supabase.auth.signOut();
 
         const timeout = setTimeout(
             () => navigate("/login", { replace: true }),
