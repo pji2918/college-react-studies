@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { SessionContext } from "../contexts/context";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function MainPage() {
     const { user } = useContext(SessionContext);
@@ -10,6 +10,10 @@ export default function MainPage() {
         navigate("/login");
         return <>Not Signed IN</>;
     } else {
-        return <>you are the {user?.email}!</>;
+        return (
+            <>
+                you are the {user?.email}! <Link to="/logout">Sign out</Link>
+            </>
+        );
     }
 }
